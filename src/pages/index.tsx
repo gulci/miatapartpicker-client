@@ -1,10 +1,10 @@
-import {type NextPage} from 'next'
-
 import {Box, Center, Container, Text, VStack} from '@chakra-ui/react'
 
 import {api} from '~/utils/api'
 
-const Home: NextPage = () => {
+import {type AppPage} from './_app'
+
+const Home: AppPage = () => {
   const hello = api.example.hello.useQuery({text: 'from tRPC'})
 
   return (
@@ -20,5 +20,7 @@ const Home: NextPage = () => {
     </Container>
   )
 }
+
+Home.auth = false
 
 export default Home
