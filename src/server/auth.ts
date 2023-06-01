@@ -40,6 +40,11 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   },
+  pages: {
+    error: '/',
+    signIn: '/',
+    signOut: '/',
+  },
   providers: [
     DiscordProvider({
       clientId: env.DISCORD_CLIENT_ID,
