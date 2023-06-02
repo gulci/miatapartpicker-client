@@ -7,7 +7,6 @@ import {ChakraProvider} from '@chakra-ui/react'
 
 import {AuthSplashComponent} from '~/components/auth/AuthSplashComponent'
 import MainLayout from '~/layouts/MainLayout'
-import '~/styles/globals.css'
 import {theme} from '~/theme'
 import {api} from '~/utils/api'
 
