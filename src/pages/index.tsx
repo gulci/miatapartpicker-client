@@ -8,19 +8,19 @@ const Home: AppPage = () => {
   const hello = api.example.hello.useQuery({text: 'from tRPC'})
 
   return (
-    <Container maxW="container.lg">
+    <Container display="flex" flexDirection="column" justifyContent="center" flexGrow="1" maxW="container.lg">
       <Center>
         <VStack>
-          <Box as="h1" fontSize="6xl" textAlign="center" mt="10">
-            MiataPartPicker
+          <Box as="h1" fontSize={{base: 'xl', lg: '6xl'}} textAlign="center">
+            Under Construction
           </Box>
-          <Text>{hello.data ? hello.data.greeting : 'Loading tRPC query...'}</Text>
+          <Text>You&apos;ll be able to update your builds here soon! :)</Text>
         </VStack>
       </Center>
     </Container>
   )
 }
 
-Home.auth = false
+Home.auth = true
 
 export default Home

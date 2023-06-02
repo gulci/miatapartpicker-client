@@ -6,8 +6,8 @@ export const theme = extendTheme({
   styles: {
     global: (props: StyleFunctionProps) => ({
       body: {
-        color: 'default',
-        bg: 'bg-canvas',
+        color: mode('gray.800', 'whiteAlpha.900')(props),
+        bg: mode('white', 'gray.800')(props),
       },
       '*::placeholder': {
         opacity: 1,

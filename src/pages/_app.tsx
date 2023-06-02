@@ -42,7 +42,7 @@ const WrappedMiataPartPickerClient = ({authRequired, page}: {authRequired?: bool
   if (authStatus === 'authenticated' || !authRequired) return <>{page}</>
   if (authStatus === 'unauthenticated')
     return (
-      <MainLayout>
+      <MainLayout hideNav>
         <AuthSplashComponent />
       </MainLayout>
     )

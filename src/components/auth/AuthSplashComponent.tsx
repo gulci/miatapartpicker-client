@@ -1,19 +1,7 @@
 import {signIn} from 'next-auth/react'
 import Image from 'next/image'
 
-import {
-  Button,
-  Container,
-  Divider,
-  FormControl,
-  FormLabel,
-  HStack,
-  Heading,
-  Icon,
-  Input,
-  Stack,
-  Text,
-} from '@chakra-ui/react'
+import {Button, Container, Heading, Icon, Stack} from '@chakra-ui/react'
 import {SiDiscord} from 'react-icons/si'
 
 import miataLogo from '../../../public/icons/miata.png'
