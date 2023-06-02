@@ -29,7 +29,7 @@ export function Nav() {
   }
 
   return (
-    <Box as="section" paddingBottom={{base: 4, lg: 12}}>
+    <Box as="section">
       <Box as="nav" boxShadow="sm" _dark={{backgroundColor: 'gray.900'}} _light={{backgroundColor: 'gray.50'}}>
         <Container maxW="container.lg" py={{base: '3', lg: '4'}}>
           <Flex justify="space-between">

@@ -1,12 +1,8 @@
 import {Box, Center, Container, Text, VStack} from '@chakra-ui/react'
 
-import {api} from '~/utils/api'
-
 import {type AppPage} from './_app'
 
 const Home: AppPage = () => {
-  const hello = api.example.hello.useQuery({text: 'from tRPC'})
-
   return (
     <Container display="flex" flexDirection="column" justifyContent="center" flexGrow="1" maxW="container.lg">
       <Center>
