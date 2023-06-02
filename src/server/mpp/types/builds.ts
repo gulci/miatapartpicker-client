@@ -8,6 +8,12 @@ export const BuildSchema = z.object({
   make: z.string().nullable(),
   mileage: z.number().nullable(),
   model: z.string().nullable(),
+  photos: z.array(
+    z.object({
+      filename: z.string(),
+      uuid: z.string(),
+    }),
+  ),
   ride_height: z.number().nullable(),
   tires: z.string().nullable(),
   uid: z.string(),

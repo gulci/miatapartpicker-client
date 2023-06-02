@@ -8,7 +8,7 @@ import {ChakraProvider} from '@chakra-ui/react'
 import {AuthSplashComponent} from '~/components/auth/AuthSplashComponent'
 import MainLayout from '~/layouts/MainLayout'
 import {theme} from '~/theme'
-import {api} from '~/utils/api'
+import {trpc} from '~/utils/trpc'
 
 export type AppPage<P = object, IP = P> = NextPage<P, IP> & {
   auth?: boolean
@@ -48,4 +48,4 @@ const WrappedMiataPartPickerClient = ({authRequired, page}: {authRequired?: bool
   return null
 }
 
-export default api.withTRPC(MiataPartPickerClient)
+export default trpc.withTRPC(MiataPartPickerClient)
