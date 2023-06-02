@@ -42,6 +42,10 @@ const BuildPage: AppPage<InferGetServerSidePropsType<typeof getServerSideProps>>
     slideChanged: (slider) => setCurrentSlide(slider.track.details.rel),
   })
 
+  const sortedBuildPhotos = build.photos.sort((a, b) =>
+    a.uuid === build.banner_photo_id ? -1 : b.uuid === build.banner_photo_id ? 1 : 0,
+  )
+
   return (
     <>
       <Center _dark={{backgroundColor: 'blue.600'}} _light={{backgroundColor: 'blue.400'}} paddingY="8">
@@ -59,16 +63,16 @@ const BuildPage: AppPage<InferGetServerSidePropsType<typeof getServerSideProps>>
           </Heading>
         </VStack>
       </Center>
-      {build.photos.length > 0 && (
+      {sortedBuildPhotos.length > 0 && (
         <Container maxW="container.lg" paddingY="8">
           <Stack spacing="4">
             <AspectRatio ratio={16 / 9}>
               <Image
                 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                src={`${env.NEXT_PUBLIC_MPP_MEDIA_URL}/${build.photos[index]!.uuid}`}
+                src={`${env.NEXT_PUBLIC_MPP_MEDIA_URL}/${sortedBuildPhotos[index]!.uuid}`}
                 objectFit="cover"
                 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                alt={build.photos[index]!.filename}
+                alt={sortedBuildPhotos[index]!.filename}
                 fallback={<Skeleton />}
               />
             </AspectRatio>
@@ -80,7 +84,7 @@ const BuildPage: AppPage<InferGetServerSidePropsType<typeof getServerSideProps>>
                 disabled={currentSlide === 0}
               />
               <HoriCarousel ref={ref} direction="row" width="full">
-                {build.photos.map((image, i) => (
+                {sortedBuildPhotos.map((image, i) => (
                   <HoriCarouselSlide key={i} onClick={() => setIndex(i)} cursor="pointer">
                     <AspectRatio
                       ratio={16 / 9}
@@ -102,7 +106,7 @@ const BuildPage: AppPage<InferGetServerSidePropsType<typeof getServerSideProps>>
                 onClick={() => slider.current?.next()}
                 icon={<IoChevronForwardOutline />}
                 aria-label="Next slide"
-                disabled={currentSlide + Number(slidesPerView) === build.photos.length}
+                disabled={currentSlide + Number(slidesPerView) === sortedBuildPhotos.length}
               />
             </HStack>
           </Stack>
