@@ -23,13 +23,17 @@ export function Nav() {
   if (authStatus === 'loading') userComponent = <SkeletonCircle size="10" />
   else if (authStatus === 'authenticated') {
     if (authData.user.name && authData.user.image)
-      userComponent = <Avatar boxSize="10" name={authData.user.name} src={authData.user.image} />
+      userComponent = (
+        <Link href="/account">
+          <Avatar title="Manage Your Account" boxSize="10" name={authData.user.name} src={authData.user.image} />
+        </Link>
+      )
     else if (authData.user.name) userComponent = <Text>{authData.user.name}</Text>
     else userComponent = <Text>{authData.user.id}</Text>
   }
 
   return (
-    <Box as="section">
+    <Box as="section" marginBottom="8">
       <Box as="nav" boxShadow="sm" _dark={{backgroundColor: 'gray.900'}} _light={{backgroundColor: 'gray.50'}}>
         <Container maxW="container.lg" py={{base: '3', lg: '4'}}>
           <Flex justify="space-between">

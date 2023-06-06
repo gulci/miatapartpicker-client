@@ -2,7 +2,7 @@ import {Box, Center, Container, Text, VStack} from '@chakra-ui/react'
 
 import {type AppPage} from './_app'
 
-const Home: AppPage = () => {
+const HomePage: AppPage = () => {
   return (
     <Container display="flex" flexDirection="column" justifyContent="center" flexGrow="1" maxW="container.lg">
       <Center>
@@ -17,6 +17,6 @@ const Home: AppPage = () => {
   )
 }
 
-Home.auth = true
+HomePage.auth = true
 
-export default Home
+export default HomePage
