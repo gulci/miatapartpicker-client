@@ -124,8 +124,6 @@ ProfilePage.getLayout = (page) => {
   )
 }
 
-ProfilePage.auth = true
-
 export default ProfilePage
 
 type ProfilePageProps = {

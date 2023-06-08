@@ -19,6 +19,7 @@ import {
   SkeletonCircle,
   forwardRef,
 } from '@chakra-ui/react'
+import {useQueryClient} from '@tanstack/react-query'
 import {SiDiscord} from 'react-icons/si'
 
 import miataLogo from '../../../public/icons/miata.png'
@@ -45,6 +46,26 @@ export interface NavProps {
 
 export function Nav({disableMargins = false}: NavProps) {
   const {data: authData, status: authStatus} = useSession()
+  const queryClient = useQueryClient()
+
+  async function onSignOut() {
+    await signOut({redirect: false})
+    queryClient.removeQueries({
+      // clears any tRPC procedures with names that begin with `protected`;
+      // procedures that begin with the term `protected` are intended to only
+      // be accessed by a user that is authenticated; when a user signs out,
+      // any local state (including caches) should immediately reflect that.
+      // thus, this `removeQueries` call is made to immediately clear any local
+      // query caches for "protected" procedures.
+      predicate: (query) =>
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        Array.isArray(query.queryKey) &&
+        Array.isArray(query.queryKey[0]) &&
+        query.queryKey[0].length === 2 &&
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+        query.queryKey[0][1].startsWith('protected'),
+    })
+  }
 
   let userComponent = (
     <Button
@@ -66,7 +87,7 @@ export function Nav({disableMargins = false}: NavProps) {
               <Link href={{pathname: '/users/[userId]', query: {userId: authData.user.id}}} legacyBehavior passHref>
                 <MenuItem as="a">Profile</MenuItem>
               </Link>
-              <MenuItem onClick={() => void signOut()}>Log Out</MenuItem>
+              <MenuItem onClick={() => void onSignOut()}>Log Out</MenuItem>
             </MenuList>
           </Portal>
         </MenuButton>

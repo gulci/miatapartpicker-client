@@ -121,6 +121,12 @@ const enforceUserIsAuthed = t.middleware(({ctx, next}) => {
  * If you want a query or mutation to ONLY be accessible to logged in users, use this. It verifies
  * the session is valid and guarantees `ctx.session.user` is not null.
  *
+ * IMPORTANT!
+ *
+ * When utilizing `protectedProcedure`, ensure that your procedure name is prefixed
+ * with `protected`; Otherwise,`AuthProvider` will not know to remove your protected
+ * procedure from any client caches after the user signs out!
+ *
  * @see https://trpc.io/docs/procedures
  */
 export const protectedProcedure = t.procedure.use(enforceUserIsAuthed)
