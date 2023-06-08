@@ -159,7 +159,7 @@ const ProfilePage: AppPage<InferGetServerSidePropsType<typeof getServerSideProps
                       <HStack alignItems="center" spacing="2">
                         <Icon as={AiOutlineInstagram} />
                         <Link
-                          href={`https://instagram.com/${profile.instagram_handle}`}
+                          href={`https://instagram.com/${profile.instagram_handle.replace(/^@/, '')}`}
                           target="_blank"
                           textDecoration="underline"
                           rel="noreferrer"
