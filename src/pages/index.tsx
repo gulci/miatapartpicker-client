@@ -4,7 +4,7 @@ import {type AppPage} from './_app'
 
 const HomePage: AppPage = () => {
   return (
-    <Container display="flex" flexDirection="column" justifyContent="center" flexGrow="1" maxW="container.lg">
+    <Container display="flex" flexDirection="column" justifyContent="center" flexGrow="1" maxWidth="container.lg">
       <Center>
         <VStack>
           <Box as="h1" fontSize={{base: 'xl', lg: '6xl'}} textAlign="center">

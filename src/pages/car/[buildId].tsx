@@ -24,20 +24,19 @@ import {
 } from '~/components/galleries/HoriCarousel'
 import {env} from '~/env.mjs'
 import MainLayout from '~/layouts/MainLayout'
+import {type AppPage} from '~/pages/_app'
 import {getBuild} from '~/server/mpp/requests/builds'
 import {type Build, BuildSchema} from '~/server/mpp/types/builds'
-
-import {type AppPage} from '../_app'
 
 const BuildPage: AppPage<InferGetServerSidePropsType<typeof getServerSideProps>> = ({build}) => {
   const [index, setIndex] = useState(0)
   const [currentSlide, setCurrentSlide] = useState(0)
-  const slidesPerView = useBreakpointValue({base: 3, md: 5})
+  const slidesPerView = useBreakpointValue({base: 3, lg: 5})
 
   const [ref, slider] = useHoriCarousel({
     slides: {
       perView: slidesPerView,
-      spacing: useBreakpointValue({base: 16, md: 24}),
+      spacing: useBreakpointValue({base: 16, lg: 24}),
     },
     slideChanged: (slider) => setCurrentSlide(slider.track.details.rel),
   })
@@ -64,7 +63,7 @@ const BuildPage: AppPage<InferGetServerSidePropsType<typeof getServerSideProps>>
         </VStack>
       </Center>
       {sortedBuildPhotos.length > 0 && (
-        <Container maxW="container.lg" paddingY="8">
+        <Container maxWidth="container.lg" paddingY="8">
           <Stack spacing="4">
             <AspectRatio ratio={16 / 9}>
               <Image
@@ -118,7 +117,11 @@ const BuildPage: AppPage<InferGetServerSidePropsType<typeof getServerSideProps>>
 
 BuildPage.getLayout = (page) => {
   const {build} = page.props as InferGetServerSidePropsType<typeof getServerSideProps>
-  return <MainLayout headProps={{title: build.description || 'MiataPartPicker'}}>{page}</MainLayout>
+  return (
+    <MainLayout headProps={{title: build.description || 'MiataPartPicker'}} navProps={{disableMargins: true}}>
+      {page}
+    </MainLayout>
+  )
 }
 
 export default BuildPage

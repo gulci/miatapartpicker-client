@@ -1,13 +1,49 @@
-import {signIn, useSession} from 'next-auth/react'
+import {signIn, signOut, useSession} from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
 
-import {Avatar, Box, Button, Container, Flex, HStack, Heading, Icon, SkeletonCircle, Text} from '@chakra-ui/react'
+import {
+  Avatar,
+  Box,
+  Button,
+  Container,
+  Flex,
+  HStack,
+  Heading,
+  Icon,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Portal,
+  SkeletonCircle,
+  forwardRef,
+} from '@chakra-ui/react'
 import {SiDiscord} from 'react-icons/si'
 
 import miataLogo from '../../../public/icons/miata.png'
 
-export function Nav() {
+const NavAvatar = forwardRef((props, ref) => {
+  const {data: authData} = useSession()
+
+  return (
+    <Avatar
+      boxSize="10"
+      name={authData?.user.name ?? undefined}
+      showBorder
+      src={authData?.user.image ?? undefined}
+      ref={ref}
+      title="Manage Your Profile"
+      {...props}
+    />
+  )
+})
+
+export interface NavProps {
+  disableMargins?: boolean
+}
+
+export function Nav({disableMargins = false}: NavProps) {
   const {data: authData, status: authStatus} = useSession()
 
   let userComponent = (
@@ -21,21 +57,26 @@ export function Nav() {
     </Button>
   )
   if (authStatus === 'loading') userComponent = <SkeletonCircle size="10" />
-  else if (authStatus === 'authenticated') {
-    if (authData.user.name && authData.user.image)
-      userComponent = (
-        <Link href="/account">
-          <Avatar title="Manage Your Account" boxSize="10" name={authData.user.name} src={authData.user.image} />
-        </Link>
-      )
-    else if (authData.user.name) userComponent = <Text>{authData.user.name}</Text>
-    else userComponent = <Text>{authData.user.id}</Text>
-  }
+  else if (authStatus === 'authenticated')
+    userComponent = (
+      <Menu>
+        <MenuButton as={NavAvatar}>
+          <Portal>
+            <MenuList>
+              <Link href={{pathname: '/users/[userId]', query: {userId: authData.user.id}}} legacyBehavior passHref>
+                <MenuItem as="a">Profile</MenuItem>
+              </Link>
+              <MenuItem onClick={() => void signOut()}>Log Out</MenuItem>
+            </MenuList>
+          </Portal>
+        </MenuButton>
+      </Menu>
+    )
 
   return (
-    <Box as="section" marginBottom="8">
+    <Box as="section" marginBottom={!disableMargins ? 8 : undefined}>
       <Box as="nav" boxShadow="sm" _dark={{backgroundColor: 'gray.900'}} _light={{backgroundColor: 'gray.50'}}>
-        <Container maxW="container.lg" py={{base: '3', lg: '4'}}>
+        <Container maxWidth="container.lg" py={{base: '3', lg: '4'}}>
           <Flex justify="space-between">
             <HStack spacing="4">
               <Link href="/">

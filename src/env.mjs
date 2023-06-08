@@ -9,6 +9,8 @@ export const env = createEnv({
   server: {
     BACKEND_ENDPOINT_URL: z.string().min(1),
     BACKEND_TOKEN: z.string().min(1),
+    DISCORD_API_ENDPOINT_URL: z.string().min(1),
+    DISCORD_BOT_TOKEN: z.string().min(1),
     DISCORD_CLIENT_ID: z.string().min(1),
     DISCORD_CLIENT_SECRET: z.string().min(1),
     NODE_ENV: z.enum(['development', 'test', 'production']),
@@ -28,6 +30,7 @@ export const env = createEnv({
    * `NEXT_PUBLIC_`.
    */
   client: {
+    NEXT_PUBLIC_DISCORD_CDN_ENDPOINT_URL: z.string().min(1),
     NEXT_PUBLIC_MPP_MEDIA_URL: z.string().min(1),
   },
 
@@ -38,10 +41,13 @@ export const env = createEnv({
   runtimeEnv: {
     BACKEND_ENDPOINT_URL: process.env.BACKEND_ENDPOINT_URL,
     BACKEND_TOKEN: process.env.BACKEND_TOKEN,
+    DISCORD_API_ENDPOINT_URL: process.env.DISCORD_API_ENDPOINT_URL,
+    DISCORD_BOT_TOKEN: process.env.DISCORD_BOT_TOKEN,
     DISCORD_CLIENT_ID: process.env.DISCORD_CLIENT_ID,
     DISCORD_CLIENT_SECRET: process.env.DISCORD_CLIENT_SECRET,
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
+    NEXT_PUBLIC_DISCORD_CDN_ENDPOINT_URL: process.env.NEXT_PUBLIC_DISCORD_CDN_ENDPOINT_URL,
     NEXT_PUBLIC_MPP_MEDIA_URL: process.env.NEXT_PUBLIC_MPP_MEDIA_URL,
     NODE_ENV: process.env.NODE_ENV,
   },

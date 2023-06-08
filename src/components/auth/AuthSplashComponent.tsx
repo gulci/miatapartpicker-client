@@ -13,7 +13,7 @@ export const AuthSplashComponent = () => (
     justifyContent="center"
     flexGrow="1"
     maxW="md"
-    py={{base: '12', md: '24'}}
+    py={{base: '12', lg: '24'}}
   >
     <Stack spacing="8">
       <Stack spacing="6">
@@ -23,8 +23,8 @@ export const AuthSplashComponent = () => (
           src={miataLogo}
           style={{objectFit: 'contain', maxHeight: '100px', width: 'auto'}}
         />
-        <Stack spacing={{base: '2', md: '3'}} textAlign="center">
-          <Heading size={{base: 'xs', md: 'sm'}}>Log in with Discord to manage your builds and profile.</Heading>
+        <Stack spacing={{base: '2', lg: '3'}} textAlign="center">
+          <Heading size={{base: 'xs', lg: 'sm'}}>Log in with Discord to manage your builds and profile.</Heading>
         </Stack>
       </Stack>
       <Stack spacing="6">
