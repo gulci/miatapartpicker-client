@@ -1,31 +1,93 @@
+import {useEffect} from 'react'
+
 import {type GetServerSideProps, type InferGetServerSidePropsType} from 'next'
+import {useSession} from 'next-auth/react'
+import {useRouter} from 'next/router'
 
 import {
   Avatar,
+  Button,
   Center,
   Container,
   Divider,
   Flex,
+  FormControl,
+  FormLabel,
   HStack,
   Heading,
   Icon,
+  Input,
   Link,
   Stack,
   Text,
   VStack,
+  useBoolean,
+  useToast,
 } from '@chakra-ui/react'
+import {zodResolver} from '@hookform/resolvers/zod'
+import {useForm} from 'react-hook-form'
 import {AiOutlineInstagram} from 'react-icons/ai'
 import {GiBarefoot, GiHand} from 'react-icons/gi'
 
-import {env} from '~/env.mjs'
 import MainLayout from '~/layouts/MainLayout'
 import {type AppPage} from '~/pages/_app'
-import {getUser as getDiscordUser} from '~/server/discord/requests/users'
-import {UserSchema as DiscordUserSchema} from '~/server/discord/types/users'
-import {getUser as getMPPUser} from '~/server/mpp/requests/users'
-import {UserSchema as MPPUserSchema} from '~/server/mpp/types/users'
+import {type UserInput, UserInputSchema} from '~/server/mpp/types/users'
+import {getUserProfile} from '~/server/mpp/users'
+import {trpc} from '~/utils/trpc'
 
-const ProfilePage: AppPage<InferGetServerSidePropsType<typeof getServerSideProps>> = ({profile}) => {
+const ProfilePage: AppPage<InferGetServerSidePropsType<typeof getServerSideProps>> = ({profile: ssrProfile}) => {
+  const [editing, setEditing] = useBoolean(false)
+  const toast = useToast()
+  const {
+    query: {userId},
+  } = useRouter()
+  const {data: profile} = trpc.mpp.getUserProfile.useQuery(
+    {userId: userId as string},
+    {
+      initialData: ssrProfile,
+    },
+  )
+  const {
+    mpp: {getUserProfile: getUserProfileUtils},
+  } = trpc.useContext()
+  const updateProfile = trpc.mpp.protectedUpdateUserProfile.useMutation({
+    onError: () => {
+      toast({
+        position: 'top',
+        status: 'error',
+        title: "Couldn't update profile :(",
+      })
+    },
+    onSuccess: async () => {
+      await getUserProfileUtils.invalidate({userId: userId as string})
+      toast({
+        position: 'top',
+        status: 'success',
+        title: 'Profile updated',
+      })
+    },
+  })
+  const {data: authData} = useSession()
+  const {handleSubmit, register} = useForm<UserInput>({
+    defaultValues: {
+      foot_size: profile.foot_size?.toString() ?? '',
+      hand_size: profile.hand_size?.toString() ?? '',
+      instagram_handle: profile.instagram_handle ?? '',
+      prefered_unit: profile.preferred_unit ?? '',
+      preferred_timezone: profile.preferred_timezone ?? '',
+    },
+    resolver: zodResolver(UserInputSchema),
+  })
+
+  useEffect(() => {
+    if (!authData) setEditing.off()
+  }, [authData, setEditing])
+
+  function onSubmit(data: UserInput) {
+    updateProfile.mutate(data)
+    setEditing.off()
+  }
+
   return (
     <>
       <Center
@@ -68,42 +130,75 @@ const ProfilePage: AppPage<InferGetServerSidePropsType<typeof getServerSideProps
             <VStack alignItems="start" spacing="4" flex="1">
               <Heading size="md">Profile</Heading>
               <Divider />
-              <VStack alignItems="start" spacing="4">
-                {profile.foot_size && (
-                  <VStack alignItems="start" spacing="1">
-                    <Text as="b">Foot Size</Text>
-                    <HStack alignItems="center" spacing="2">
-                      <Icon as={GiBarefoot} />
-                      <Text>{profile.foot_size}</Text>
-                    </HStack>
-                  </VStack>
-                )}
-                {profile.hand_size && (
-                  <VStack alignItems="start" spacing="1">
-                    <Text as="b">Hand Size</Text>
-                    <HStack alignItems="center" spacing="2">
-                      <Icon as={GiHand} />
-                      <Text>{profile.hand_size}</Text>
-                    </HStack>
-                  </VStack>
-                )}
-                {profile.instagram_handle && (
-                  <VStack alignItems="start" spacing="1">
-                    <Text as="b">Instagram</Text>
-                    <HStack alignItems="center" spacing="2">
-                      <Icon as={AiOutlineInstagram} />
-                      <Link
-                        href={`https://instagram.com/${profile.instagram_handle}`}
-                        target="_blank"
-                        textDecoration="underline"
-                        rel="noreferrer"
-                      >
-                        {profile.instagram_handle}
-                      </Link>
-                    </HStack>
-                  </VStack>
-                )}
-              </VStack>
+              {!editing ? (
+                <VStack alignItems="start" spacing="4" width="full">
+                  {!profile.foot_size && !profile.hand_size && !profile.instagram_handle && (
+                    <Text as="i">This user has not added any information.</Text>
+                  )}
+                  {profile.foot_size && (
+                    <VStack alignItems="start" spacing="1">
+                      <Text as="b">Foot Size</Text>
+                      <HStack alignItems="center" spacing="2">
+                        <Icon as={GiBarefoot} />
+                        <Text>{profile.foot_size}</Text>
+                      </HStack>
+                    </VStack>
+                  )}
+                  {profile.hand_size && (
+                    <VStack alignItems="start" spacing="1">
+                      <Text as="b">Hand Size</Text>
+                      <HStack alignItems="center" spacing="2">
+                        <Icon as={GiHand} />
+                        <Text>{profile.hand_size}</Text>
+                      </HStack>
+                    </VStack>
+                  )}
+                  {profile.instagram_handle && (
+                    <VStack alignItems="start" spacing="1">
+                      <Text as="b">Instagram</Text>
+                      <HStack alignItems="center" spacing="2">
+                        <Icon as={AiOutlineInstagram} />
+                        <Link
+                          href={`https://instagram.com/${profile.instagram_handle}`}
+                          target="_blank"
+                          textDecoration="underline"
+                          rel="noreferrer"
+                        >
+                          {profile.instagram_handle}
+                        </Link>
+                      </HStack>
+                    </VStack>
+                  )}
+                  {authData && (
+                    <Button colorScheme="blue" onClick={setEditing.on} marginTop="8">
+                      Edit Profile
+                    </Button>
+                  )}
+                </VStack>
+              ) : (
+                <VStack as="form" alignItems="start" onSubmit={handleSubmit(onSubmit)} spacing="4" width="full">
+                  <FormControl>
+                    <FormLabel>Foot Size</FormLabel>
+                    <Input {...register('foot_size')} step=".01" type="number" width="full" />
+                  </FormControl>
+                  <FormControl>
+                    <FormLabel>Hand Size</FormLabel>
+                    <Input {...register('hand_size')} step=".01" type="number" width="full" />
+                  </FormControl>
+                  <FormControl>
+                    <FormLabel>Instagram</FormLabel>
+                    <Input {...register('instagram_handle')} width="full" />
+                  </FormControl>
+                  <HStack marginTop="8" spacing="4">
+                    <Button colorScheme="gray" onClick={setEditing.off}>
+                      Cancel
+                    </Button>
+                    <Button colorScheme="blue" type="submit">
+                      Update Profile
+                    </Button>
+                  </HStack>
+                </VStack>
+              )}
             </VStack>
           </Flex>
         </Stack>
@@ -143,39 +238,11 @@ type ProfilePageProps = {
 
 export const getServerSideProps: GetServerSideProps<ProfilePageProps, {userId: string}> = async (ctx) => {
   if (!ctx.params) return {notFound: true}
-  const discordUserRes = await getDiscordUser(ctx.params.userId)
-  if (!discordUserRes.ok) {
-    if (discordUserRes.status === 404) return {notFound: true}
-    else throw new Error('failed to fetch user from discord')
-  }
-  const discordUser = DiscordUserSchema.parse(await discordUserRes.json())
-  const mppUserRes = await getMPPUser(ctx.params.userId)
-  if (!mppUserRes.ok) {
-    if (mppUserRes.status === 404) return {notFound: true}
-    else throw new Error('failed to fetch user from mpp')
-  }
-  const mppUser = MPPUserSchema.parse(await mppUserRes.json())
-
-  let avatarUrl = `${env.NEXT_PUBLIC_DISCORD_CDN_ENDPOINT_URL}/embed/avatars/${
-    Number(discordUser.discriminator) % 5
-  }.png`
-  if (discordUser.avatar)
-    avatarUrl = `${env.NEXT_PUBLIC_DISCORD_CDN_ENDPOINT_URL}/avatars/${discordUser.id}/${discordUser.avatar}.png`
-
+  const profile = await getUserProfile(ctx.params.userId)
+  if (!profile) return {notFound: true}
   return {
     props: {
-      profile: {
-        avatarUrl,
-        builds: mppUser.builds,
-        discriminator: discordUser.discriminator,
-        displayName: discordUser.display_name,
-        foot_size: mppUser.foot_size,
-        hand_size: mppUser.hand_size,
-        instagram_handle: mppUser.instagram_handle,
-        preferred_timezone: mppUser.preferred_timezone,
-        preferred_unit: mppUser.prefered_unit,
-        username: discordUser.username,
-      },
+      profile,
     },
   }
 }

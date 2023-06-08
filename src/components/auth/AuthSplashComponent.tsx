@@ -30,7 +30,7 @@ export const AuthSplashComponent = () => (
       <Stack spacing="6">
         <Stack spacing="3">
           <Button
-            onClick={() => void signIn('discord')}
+            onClick={() => signIn('discord')}
             variant="outline"
             leftIcon={<Icon as={SiDiscord} boxSize="5" />}
             iconSpacing="3"

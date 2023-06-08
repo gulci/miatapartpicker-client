@@ -87,7 +87,7 @@ export function Nav({disableMargins = false}: NavProps) {
               <Link href={{pathname: '/users/[userId]', query: {userId: authData.user.id}}} legacyBehavior passHref>
                 <MenuItem as="a">Profile</MenuItem>
               </Link>
-              <MenuItem onClick={() => void onSignOut()}>Log Out</MenuItem>
+              <MenuItem onClick={() => onSignOut()}>Log Out</MenuItem>
             </MenuList>
           </Portal>
         </MenuButton>
