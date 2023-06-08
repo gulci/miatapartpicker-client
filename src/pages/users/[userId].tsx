@@ -169,7 +169,7 @@ const ProfilePage: AppPage<InferGetServerSidePropsType<typeof getServerSideProps
                       </HStack>
                     </VStack>
                   )}
-                  {authData && (
+                  {authData && userId === authData.user.id && (
                     <Button colorScheme="blue" onClick={setEditing.on} marginTop="8">
                       Edit Profile
                     </Button>
