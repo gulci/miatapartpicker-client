@@ -4,6 +4,7 @@ import {SessionProvider, useSession} from 'next-auth/react'
 import {type AppType, type AppProps as BaseAppProps} from 'next/app'
 
 import {ChakraProvider} from '@chakra-ui/react'
+import {Analytics} from '@vercel/analytics/react'
 
 import {AuthSplashComponent} from '~/components/auth/AuthSplashComponent'
 import MainLayout from '~/layouts/MainLayout'
@@ -27,11 +28,14 @@ const MiataPartPickerClient: AppType<{session: Session | null}> = ({
   const getLayout = Component.getLayout ?? ((page) => <MainLayout>{page}</MainLayout>)
 
   return (
-    <ChakraProvider theme={theme}>
-      <SessionProvider session={session}>
-        <WrappedMiataPartPickerClient authRequired={Component.auth} page={getLayout(<Component {...pageProps} />)} />
-      </SessionProvider>
-    </ChakraProvider>
+    <>
+      <ChakraProvider theme={theme}>
+        <SessionProvider session={session}>
+          <WrappedMiataPartPickerClient authRequired={Component.auth} page={getLayout(<Component {...pageProps} />)} />
+        </SessionProvider>
+      </ChakraProvider>
+      <Analytics />
+    </>
   )
 }
 
