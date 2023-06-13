@@ -10,7 +10,7 @@ export async function getUser(userId: string) {
 
 export async function updateUser(userId: string, data: UserInput) {
   return await fetch(`${env.BACKEND_ENDPOINT_URL}/users/${userId}`, {
-    body: JSON.stringify(data),
+    body: JSON.stringify({user: data}),
     headers: mppApiDefaultHeaders,
     method: 'PUT',
   })
