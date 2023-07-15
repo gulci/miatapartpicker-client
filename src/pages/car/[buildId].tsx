@@ -23,7 +23,7 @@ import {
   useHoriCarousel,
 } from '~/components/galleries/HoriCarousel'
 import {env} from '~/env.mjs'
-import MainLayout from '~/layouts/MainLayout'
+import {MainLayout} from '~/layouts/MainLayout'
 import {type AppPage} from '~/pages/_app'
 import {getBuild} from '~/server/mpp/requests/builds'
 import {type Build, BuildSchema} from '~/server/mpp/types/builds'

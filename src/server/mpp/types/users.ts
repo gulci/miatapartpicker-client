@@ -1,5 +1,19 @@
 import {z} from 'zod'
 
+export const ProfileSchema = z.object({
+  avatarUrl: z.string(),
+  builds: z.array(z.string()),
+  discriminator: z.string(),
+  displayName: z.string(),
+  foot_size: z.number().nullable(),
+  hand_size: z.number().nullable(),
+  instagram_handle: z.string().nullable(),
+  preferred_timezone: z.string().nullable(),
+  preferred_unit: z.string().nullable(),
+  username: z.string(),
+})
+export type Profile = z.infer<typeof ProfileSchema>
+
 export const UserSchema = z.object({
   builds: z.array(z.string()),
   discord_user_id: z.number(),

@@ -7,7 +7,7 @@ export interface HeadProps {
   url?: string
 }
 
-export default function Head(props: HeadProps) {
+export function Head(props: HeadProps) {
   const description = props.description ? props.description : 'Pick parts. Build your Miata. Compare and share.'
   const title = props.title ? props.title : 'MiataPartPicker'
   const type = props.type ? props.type : 'website'

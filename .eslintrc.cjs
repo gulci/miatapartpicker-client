@@ -7,17 +7,13 @@ const config = {
     node: true,
     browser: true,
   },
-  extends: [
-    'eslint:recommended',
-    'plugin:jsx-a11y/recommended',
-    'plugin:prettier/recommended',
-    'prettier',
-    'plugin:@typescript-eslint/recommended',
-    'next',
-  ],
+  extends: ['eslint:recommended', 'plugin:jsx-a11y/recommended', 'plugin:prettier/recommended', 'prettier', 'next'],
   overrides: [
     {
-      extends: ['plugin:@typescript-eslint/recommended-requiring-type-checking'],
+      extends: [
+        'plugin:@typescript-eslint/recommended',
+        'plugin:@typescript-eslint/recommended-requiring-type-checking',
+      ],
       files: ['*.ts', '*.tsx'],
       parserOptions: {
         project: path.join(__dirname, 'tsconfig.json'),

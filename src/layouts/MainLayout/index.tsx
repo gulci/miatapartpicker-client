@@ -2,7 +2,7 @@ import type {ReactNode} from 'react'
 
 import {Flex} from '@chakra-ui/react'
 
-import Head from './Head'
+import {Head} from './Head'
 import type {HeadProps} from './Head'
 import {Nav, type NavProps} from './Nav'
 
@@ -13,7 +13,7 @@ export interface MainLayoutProps {
   navProps?: NavProps
 }
 
-function MainLayout({children, headProps, hideNav = false, navProps}: MainLayoutProps) {
+export function MainLayout({children, headProps, hideNav = false, navProps}: MainLayoutProps) {
   return (
     <>
       <Head {...headProps} />
@@ -26,5 +26,3 @@ function MainLayout({children, headProps, hideNav = false, navProps}: MainLayout
     </>
   )
 }
-
-export default MainLayout

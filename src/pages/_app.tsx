@@ -7,7 +7,7 @@ import {ChakraProvider} from '@chakra-ui/react'
 import {Analytics} from '@vercel/analytics/react'
 
 import {AuthSplashComponent} from '~/components/auth/AuthSplashComponent'
-import MainLayout from '~/layouts/MainLayout'
+import {MainLayout} from '~/layouts/MainLayout'
 import {theme} from '~/theme'
 import {trpc} from '~/utils/trpc'
 
