@@ -1,5 +1,3 @@
-import {useEffect} from 'react'
-
 import {type GetServerSideProps, type InferGetServerSidePropsType} from 'next'
 import {useSession} from 'next-auth/react'
 import {useRouter} from 'next/router'
@@ -79,10 +77,6 @@ const ProfilePage: AppPage<InferGetServerSidePropsType<typeof getServerSideProps
     resolver: zodResolver(UserInputSchema),
   })
 
-  useEffect(() => {
-    if (!authData) setEditing.off()
-  }, [authData, setEditing])
-
   function onSubmit(data: UserInput) {
     updateProfile.mutate(data)
     setEditing.off()
@@ -130,7 +124,7 @@ const ProfilePage: AppPage<InferGetServerSidePropsType<typeof getServerSideProps
             <VStack alignItems="start" spacing="4" flex="1">
               <Heading size="md">Profile</Heading>
               <Divider />
-              {!editing ? (
+              {!authData || !editing ? (
                 <VStack alignItems="start" spacing="4" width="full">
                   {!profile.foot_size && !profile.hand_size && !profile.instagram_handle && (
                     <Text as="i">This user has not added any information.</Text>
