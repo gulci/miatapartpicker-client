@@ -90,7 +90,7 @@ const ProfilePage: AppPage<InferGetServerSidePropsType<typeof getServerSideProps
           <Divider />
           <VStack alignItems="start" spacing="4">
             <VStack alignItems="start" spacing="1">
-              <Text as="b">Completed Builds</Text>
+              <Text as="b">Builds</Text>
               <NextLink href={{pathname: '/users/[userId]/builds', query: {userId}}} legacyBehavior passHref>
                 <Link>{profile.builds.length}</Link>
               </NextLink>

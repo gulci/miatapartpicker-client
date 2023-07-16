@@ -32,7 +32,7 @@ const BuildsPage: AppPage<InferGetServerSidePropsType<typeof getServerSideProps>
           <Divider />
           <VStack alignItems="start" spacing="4" width="full">
             <VStack alignItems="start" spacing="1" width="full">
-              <Text as="b">Completed Builds</Text>
+              <Text as="b">Builds</Text>
               <List width="full">
                 {builds.map((build) => (
                   <ListItem
