@@ -10,6 +10,13 @@ export const BuildSchema = z.object({
   model: z.string().nullable(),
   photos: z.array(
     z.object({
+      meta: z.object({
+        format: z.string(),
+        width: z.number(),
+        animated: z.boolean(),
+        frame_count: z.number(),
+        height: z.number(),
+      }),
       filename: z.string(),
       uuid: z.string(),
     }),

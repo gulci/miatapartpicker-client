@@ -13,6 +13,7 @@ export const env = createEnv({
     DISCORD_BOT_TOKEN: z.string().min(1),
     DISCORD_CLIENT_ID: z.string().min(1),
     DISCORD_CLIENT_SECRET: z.string().min(1),
+    MEDIA_HOSTNAME: z.string().min(1),
     NODE_ENV: z.enum(['development', 'test', 'production']),
     NEXTAUTH_SECRET: process.env.NODE_ENV === 'production' ? z.string().min(1) : z.string().min(1).optional(),
     NEXTAUTH_URL: z.preprocess(
@@ -45,6 +46,7 @@ export const env = createEnv({
     DISCORD_BOT_TOKEN: process.env.DISCORD_BOT_TOKEN,
     DISCORD_CLIENT_ID: process.env.DISCORD_CLIENT_ID,
     DISCORD_CLIENT_SECRET: process.env.DISCORD_CLIENT_SECRET,
+    MEDIA_HOSTNAME: process.env.MEDIA_HOSTNAME,
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
     NEXT_PUBLIC_DISCORD_CDN_ENDPOINT_URL: process.env.NEXT_PUBLIC_DISCORD_CDN_ENDPOINT_URL,

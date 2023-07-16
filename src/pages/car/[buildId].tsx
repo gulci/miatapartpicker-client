@@ -1,21 +1,11 @@
 import {type ReactElement, useState} from 'react'
 
 import {type GetServerSideProps, type InferGetServerSidePropsType} from 'next'
+import Image from 'next/image'
 import NextLink from 'next/link'
 import {useRouter} from 'next/router'
 
-import {
-  AspectRatio,
-  Avatar,
-  Container,
-  HStack,
-  Heading,
-  Image,
-  Link,
-  Skeleton,
-  Stack,
-  useBreakpointValue,
-} from '@chakra-ui/react'
+import {AspectRatio, Avatar, Container, HStack, Heading, Stack, useBreakpointValue} from '@chakra-ui/react'
 import {IoChevronBackOutline, IoChevronForwardOutline} from 'react-icons/io5'
 
 import {
@@ -57,6 +47,7 @@ const BuildPage: AppPage<InferGetServerSidePropsType<typeof getServerSideProps>>
   const sortedBuildPhotos = build.photos.sort((a, b) =>
     a.uuid === build.banner_photo_id ? -1 : b.uuid === build.banner_photo_id ? 1 : 0,
   )
+  const currentBuildPhoto = sortedBuildPhotos[index]
 
   return (
     <>
@@ -89,17 +80,17 @@ const BuildPage: AppPage<InferGetServerSidePropsType<typeof getServerSideProps>>
           </NextLink>
         </HStack>
       </Banner>
-      {sortedBuildPhotos.length > 0 && (
+      {sortedBuildPhotos.length > 0 && currentBuildPhoto && (
         <Container maxWidth="container.lg" paddingY="8">
           <Stack spacing="4">
             <AspectRatio ratio={16 / 9}>
               <Image
-                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                src={`${env.NEXT_PUBLIC_MPP_MEDIA_URL}/${sortedBuildPhotos[index]!.uuid}`}
-                objectFit="cover"
-                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                alt={sortedBuildPhotos[index]!.filename}
-                fallback={<Skeleton />}
+                alt={currentBuildPhoto.filename}
+                height={currentBuildPhoto.meta.height}
+                priority
+                src={`${env.NEXT_PUBLIC_MPP_MEDIA_URL}/${currentBuildPhoto.uuid}`}
+                style={{objectFit: 'cover'}}
+                width={currentBuildPhoto.meta.width}
               />
             </AspectRatio>
             <HStack spacing="4">
@@ -119,10 +110,11 @@ const BuildPage: AppPage<InferGetServerSidePropsType<typeof getServerSideProps>>
                       _hover={{opacity: 1}}
                     >
                       <Image
-                        src={`${env.NEXT_PUBLIC_MPP_MEDIA_URL}/${image.uuid}`}
-                        objectFit="cover"
                         alt={image.filename}
-                        fallback={<Skeleton />}
+                        height={image.meta.height}
+                        src={`${env.NEXT_PUBLIC_MPP_MEDIA_URL}/${image.uuid}`}
+                        style={{objectFit: 'cover'}}
+                        width={image.meta.width}
                       />
                     </AspectRatio>
                   </HoriCarouselSlide>

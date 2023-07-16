@@ -18,5 +18,15 @@ const config = {
     locales: ['en'],
     defaultLocale: 'en',
   },
+
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: process.env.MEDIA_HOSTNAME || '',
+        pathname: '/media/**',
+      },
+    ],
+  },
 }
 export default config
