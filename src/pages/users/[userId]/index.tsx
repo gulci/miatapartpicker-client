@@ -1,4 +1,4 @@
-import {type ReactElement} from 'react'
+import {type ReactElement, useEffect} from 'react'
 
 import {type GetServerSideProps, type InferGetServerSidePropsType} from 'next'
 import {useSession} from 'next-auth/react'
@@ -66,7 +66,7 @@ const ProfilePage: AppPage<InferGetServerSidePropsType<typeof getServerSideProps
     },
   })
   const {data: authData} = useSession()
-  const {handleSubmit, register} = useForm<UserInput>({
+  const {handleSubmit, register, reset} = useForm<UserInput>({
     defaultValues: {
       foot_size: profile.foot_size?.toString() ?? '',
       hand_size: profile.hand_size?.toString() ?? '',
@@ -81,6 +81,17 @@ const ProfilePage: AppPage<InferGetServerSidePropsType<typeof getServerSideProps
     updateProfile.mutate(data)
     setEditing.off()
   }
+
+  useEffect(() => {
+    if (!profile) return
+    reset({
+      foot_size: profile.foot_size?.toString() ?? '',
+      hand_size: profile.hand_size?.toString() ?? '',
+      instagram_handle: profile.instagram_handle ?? '',
+      prefered_unit: profile.preferred_unit ?? '',
+      preferred_timezone: profile.preferred_timezone ?? '',
+    })
+  }, [profile, reset])
 
   return (
     <Stack direction={{base: 'column', lg: 'row'}} spacing={{base: '12', lg: '16'}} flex="1">
