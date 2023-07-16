@@ -1,11 +1,13 @@
 import {type ReactElement, useState} from 'react'
 
 import {type GetServerSideProps, type InferGetServerSidePropsType} from 'next'
+import Image from 'next/image'
 import NextLink from 'next/link'
 import {useRouter} from 'next/router'
 
-import {Center, Divider, Flex, Heading, Link, List, ListItem, Stack, Text, VStack} from '@chakra-ui/react'
+import {AspectRatio, Center, Divider, Flex, Heading, Link, List, ListItem, Stack, Text, VStack} from '@chakra-ui/react'
 
+import {env} from '~/env.mjs'
 import {UserLayout} from '~/layouts/UserLayout'
 import {type AppPage} from '~/pages/_app'
 import {getUserBuilds} from '~/server/mpp/builds'
@@ -23,6 +25,7 @@ const BuildsPage: AppPage<InferGetServerSidePropsType<typeof getServerSideProps>
     builds.length > 0 && builds[0] ? builds[0].uid : null,
   )
   const selectedBuild = builds.find((b) => b.uid === selectedBuildUid)
+  const selectedBuildBannerPhoto = selectedBuild?.photos.find((p) => selectedBuild.banner_photo_id === p.uuid)
 
   return (
     <Stack direction={{base: 'column', lg: 'row'}} flex="1" height="200" spacing={{base: '12', lg: '16'}}>
@@ -80,6 +83,18 @@ const BuildsPage: AppPage<InferGetServerSidePropsType<typeof getServerSideProps>
                 </Link>
               </NextLink>
             </Center>
+            {selectedBuildBannerPhoto && (
+              <AspectRatio ratio={16 / 9} width="full">
+                <Image
+                  alt={selectedBuildBannerPhoto.filename}
+                  height={selectedBuildBannerPhoto.meta.height}
+                  priority={builds[0] && builds[0].uid === selectedBuildUid}
+                  src={`${env.NEXT_PUBLIC_MPP_MEDIA_URL}/${selectedBuildBannerPhoto.uuid}`}
+                  style={{objectFit: 'cover'}}
+                  width={selectedBuildBannerPhoto.meta.width}
+                />
+              </AspectRatio>
+            )}
           </VStack>
         )}
       </Flex>

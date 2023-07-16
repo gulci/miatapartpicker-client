@@ -1,7 +1,7 @@
 import NextLink from 'next/link'
 import {useRouter} from 'next/router'
 
-import {Avatar, Button, type ButtonProps, HStack, Heading, Link, LinkBox, LinkOverlay} from '@chakra-ui/react'
+import {Avatar, Button, type ButtonProps, HStack, Heading, LinkBox, LinkOverlay} from '@chakra-ui/react'
 
 import {Banner} from '~/components/ui/Banner'
 import {type Profile} from '~/server/mpp/types/users'
