@@ -27,7 +27,7 @@ interface MobileMenuProps extends Omit<DrawerProps, 'children'> {
 
 export function MobileMenu({onSignOut, ...props}: MobileMenuProps) {
   const {data: authData, status: authStatus} = useSession()
-  console.log(authData)
+
   return (
     <Drawer {...props}>
       <DrawerOverlay />
