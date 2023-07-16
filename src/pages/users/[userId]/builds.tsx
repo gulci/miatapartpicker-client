@@ -28,7 +28,7 @@ const BuildsPage: AppPage<InferGetServerSidePropsType<typeof getServerSideProps>
   const selectedBuildBannerPhoto = selectedBuild?.photos.find((p) => selectedBuild.banner_photo_id === p.uuid)
 
   return (
-    <Stack direction={{base: 'column', lg: 'row'}} flex="1" height="200" spacing={{base: '12', lg: '16'}}>
+    <Stack direction={{base: 'column', lg: 'row'}} flex="1" spacing={{base: '12', lg: '16'}}>
       <Flex maxWidth={{lg: '72'}} width="full">
         <VStack alignItems="start" spacing="4" flex="1">
           <Heading size="md">Account</Heading>
