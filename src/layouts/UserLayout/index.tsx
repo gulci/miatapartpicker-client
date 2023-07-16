@@ -21,7 +21,7 @@ export function UserLayout({children, profile, title}: UserLayoutProps) {
       navProps={{disableMargins: true}}
     >
       <Header profile={profile} title={title} />
-      <Container flex="1" maxWidth="container.lg">
+      <Container flex="1" maxWidth="container.lg" paddingBottom={{base: '4', lg: '0'}}>
         {children}
       </Container>
     </MainLayout>
