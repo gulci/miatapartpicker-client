@@ -51,17 +51,17 @@ export function Header({profile: ssrProfile, title}: HeaderProps) {
       <Heading as="h1" color="white">
         {title}
       </Heading>
-      <HStack
-        spacing="4"
-        title={`${profile.username}${profile.discriminator !== '0' ? `#${profile.discriminator}` : ''}`}
-      >
-        <Avatar boxSize="14" name={profile.displayName} src={profile.avatarUrl} />
-        <Heading color="whiteAlpha.700" size="md">
-          <NextLink href={{pathname: '/users/[userId]', query: {userId}}} legacyBehavior passHref>
-            <Link color="unset">{profile.displayName}</Link>
-          </NextLink>
-        </Heading>
-      </HStack>
+      <NextLink href={{pathname: '/users/[userId]', query: {userId}}}>
+        <HStack
+          spacing="4"
+          title={`${profile.username}${profile.discriminator !== '0' ? `#${profile.discriminator}` : ''}`}
+        >
+          <Avatar size="md" name={profile.displayName} src={profile.avatarUrl} />
+          <Heading _hover={{textDecoration: 'underline'}} color="whiteAlpha.700" size="md">
+            {profile.displayName}
+          </Heading>
+        </HStack>
+      </NextLink>
       <HStack marginTop="2" spacing="4">
         <LinkBox>
           <HeaderButton isActive={route === '/users/[userId]'}>
