@@ -1,22 +1,27 @@
-import {Box, Center, Container, Text, VStack} from '@chakra-ui/react'
+import {type GetServerSideProps} from 'next'
+import {getServerSession} from 'next-auth'
+
+import {authOptions} from '~/server/auth'
 
 import {type AppPage} from './_app'
 
-const HomePage: AppPage = () => {
-  return (
-    <Container display="flex" flexDirection="column" justifyContent="center" flexGrow="1" maxWidth="container.lg">
-      <Center>
-        <VStack>
-          <Box as="h1" fontSize={{base: 'xl', lg: '6xl'}} textAlign="center">
-            Under Construction
-          </Box>
-          <Text>You&apos;ll be able to update your builds here soon! :)</Text>
-        </VStack>
-      </Center>
-    </Container>
-  )
-}
+const HomePage: AppPage = () => null
 
 HomePage.auth = true
 
 export default HomePage
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const session = await getServerSession(ctx.req, ctx.res, authOptions)
+
+  if (session) {
+    return {
+      redirect: {
+        destination: `/users/${session.user.id}`,
+        permanent: false,
+      },
+    }
+  }
+
+  return {props: {}}
+}
