@@ -5,7 +5,17 @@ import Image from 'next/image'
 import NextLink from 'next/link'
 import {useRouter} from 'next/router'
 
-import {AspectRatio, Avatar, Container, HStack, Heading, Stack, useBreakpointValue} from '@chakra-ui/react'
+import {
+  AspectRatio,
+  Avatar,
+  Container,
+  HStack,
+  Heading,
+  Skeleton,
+  SkeletonCircle,
+  Stack,
+  useBreakpointValue,
+} from '@chakra-ui/react'
 import {IoChevronBackOutline, IoChevronForwardOutline} from 'react-icons/io5'
 
 import {
@@ -20,20 +30,15 @@ import {MainLayout} from '~/layouts/MainLayout'
 import {type AppPage} from '~/pages/_app'
 import {getBuild} from '~/server/mpp/builds'
 import {type Build} from '~/server/mpp/types/builds'
-import {type Profile} from '~/server/mpp/types/users'
-import {getUserProfile} from '~/server/mpp/users'
 import {trpc} from '~/utils/trpc'
 
-const BuildPage: AppPage<InferGetServerSidePropsType<typeof getServerSideProps>> = ({
-  build: ssrBuild,
-  profile: ssrProfile,
-}) => {
+const BuildPage: AppPage<InferGetServerSidePropsType<typeof getServerSideProps>> = ({build: ssrBuild}) => {
   const slidesPerView = useBreakpointValue({base: 3, lg: 5})
   const {
     query: {buildId},
   } = useRouter()
   const {data: build} = trpc.mpp.getBuild.useQuery({buildId: buildId as string}, {initialData: ssrBuild})
-  const {data: profile} = trpc.mpp.getUserProfile.useQuery({userId: build.user_id}, {initialData: ssrProfile})
+  const {data: profile, fetchStatus: profileFetchStatus} = trpc.mpp.getUserProfile.useQuery({userId: build.user_id})
   const [currentSlide, setCurrentSlide] = useState(0)
   const [index, setIndex] = useState(0)
 
@@ -64,20 +69,32 @@ const BuildPage: AppPage<InferGetServerSidePropsType<typeof getServerSideProps>>
           {build.description || 'Untitled Build'}
         </Heading>
         <HStack spacing="2" alignItems="center">
-          <Heading _dark={{color: 'whiteAlpha.600'}} _light={{color: 'blackAlpha.600'}} size="sm">
-            by
-          </Heading>
-          <NextLink href={{pathname: '/users/[userId]', query: {userId: build.user_id}}}>
-            <HStack
-              spacing="2"
-              title={`${profile.username}${profile.discriminator !== '0' ? `#${profile.discriminator}` : ''}`}
-            >
-              <Avatar size="md" name={profile.displayName} src={profile.avatarUrl} />
-              <Heading _hover={{textDecoration: 'underline'}} color="whiteAlpha.700" size="md">
-                {profile.displayName}
+          {!profile ? (
+            profileFetchStatus === 'fetching' && (
+              <>
+                <Skeleton height="4" width="8" />
+                <SkeletonCircle size="48px" />
+                <Skeleton height="4" width="24" />
+              </>
+            )
+          ) : (
+            <>
+              <Heading _dark={{color: 'whiteAlpha.600'}} _light={{color: 'blackAlpha.600'}} size="sm">
+                by
               </Heading>
-            </HStack>
-          </NextLink>
+              <NextLink href={{pathname: '/users/[userId]', query: {userId: build.user_id}}}>
+                <HStack
+                  spacing="2"
+                  title={`${profile.username}${profile.discriminator !== '0' ? `#${profile.discriminator}` : ''}`}
+                >
+                  <Avatar size="md" name={profile.displayName} src={profile.avatarUrl} />
+                  <Heading _hover={{textDecoration: 'underline'}} color="whiteAlpha.700" size="md">
+                    {profile.displayName}
+                  </Heading>
+                </HStack>
+              </NextLink>
+            </>
+          )}
         </HStack>
       </Banner>
       {sortedBuildPhotos.length > 0 && currentBuildPhoto && (
@@ -149,14 +166,11 @@ export default BuildPage
 
 type BuildPageProps = {
   build: Build
-  profile: Profile
 }
 
 export const getServerSideProps: GetServerSideProps<BuildPageProps, {buildId: string}> = async (ctx) => {
   if (!ctx.params) return {notFound: true}
   const build = await getBuild(ctx.params.buildId)
   if (!build) return {notFound: true}
-  const profile = await getUserProfile(build.user_id)
-  if (!profile) return {notFound: true}
-  return {props: {build, profile}}
+  return {props: {build}}
 }
