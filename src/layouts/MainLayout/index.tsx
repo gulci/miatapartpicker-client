@@ -1,6 +1,7 @@
 import type {ReactNode} from 'react'
 
-import {Flex} from '@chakra-ui/react'
+import {Center, Container, Divider, Flex, Link, Text} from '@chakra-ui/react'
+import {AiFillGithub} from 'react-icons/ai'
 
 import {Head} from './Head'
 import type {HeadProps} from './Head'
@@ -23,6 +24,18 @@ export function MainLayout({children, headProps, hideNav = false, navProps}: Mai
           {children}
         </Flex>
       </Flex>
+      <Container as="footer" maxW="container.xl" mt={4} paddingBottom="8" textAlign="center">
+        <Divider marginY="8" />
+        <Center>
+          <Link
+            _hover={{_light: {color: 'blue.500'}, _dark: {color: 'blue.100'}}}
+            isExternal
+            href="https://github.com/miata-bot"
+          >
+            <AiFillGithub size="1.5em" />
+          </Link>
+        </Center>
+      </Container>
     </>
   )
 }
