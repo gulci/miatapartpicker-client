@@ -26,11 +26,10 @@ export const UserSchema = z.object({
 })
 
 export const UserInputSchema = UserSchema.pick({
+  foot_size: true,
+  hand_size: true,
   instagram_handle: true,
   prefered_unit: true,
   preferred_timezone: true,
-}).extend({
-  foot_size: z.string().nullable(),
-  hand_size: z.string().nullable(),
 })
 export type UserInput = z.infer<typeof UserInputSchema>

@@ -10,6 +10,7 @@ import {
   Divider,
   Flex,
   FormControl,
+  FormHelperText,
   FormLabel,
   HStack,
   Heading,
@@ -57,6 +58,13 @@ const ProfilePage: AppPage<InferGetServerSidePropsType<typeof getServerSideProps
       })
     },
     onSuccess: async () => {
+      reset({
+        foot_size: profile.foot_size ?? null,
+        hand_size: profile.hand_size ?? null,
+        instagram_handle: profile.instagram_handle ?? '',
+        prefered_unit: profile.preferred_unit ?? '',
+        preferred_timezone: profile.preferred_timezone ?? '',
+      })
       await getUserProfileUtils.invalidate({userId: userId as string})
       toast({
         position: 'top',
@@ -68,8 +76,8 @@ const ProfilePage: AppPage<InferGetServerSidePropsType<typeof getServerSideProps
   const {data: authData} = useSession()
   const {handleSubmit, register, reset} = useForm<UserInput>({
     defaultValues: {
-      foot_size: profile.foot_size?.toString() ?? '',
-      hand_size: profile.hand_size?.toString() ?? '',
+      foot_size: profile.foot_size ?? null,
+      hand_size: profile.hand_size ?? null,
       instagram_handle: profile.instagram_handle ?? '',
       prefered_unit: profile.preferred_unit ?? '',
       preferred_timezone: profile.preferred_timezone ?? '',
@@ -85,8 +93,8 @@ const ProfilePage: AppPage<InferGetServerSidePropsType<typeof getServerSideProps
   useEffect(() => {
     if (!profile) return
     reset({
-      foot_size: profile.foot_size?.toString() ?? '',
-      hand_size: profile.hand_size?.toString() ?? '',
+      foot_size: profile.foot_size ?? null,
+      hand_size: profile.hand_size ?? null,
       instagram_handle: profile.instagram_handle ?? '',
       prefered_unit: profile.preferred_unit ?? '',
       preferred_timezone: profile.preferred_timezone ?? '',
@@ -161,11 +169,13 @@ const ProfilePage: AppPage<InferGetServerSidePropsType<typeof getServerSideProps
             <VStack as="form" alignItems="start" onSubmit={handleSubmit(onSubmit)} spacing="4" width="full">
               <FormControl>
                 <FormLabel>Foot Size</FormLabel>
-                <Input {...register('foot_size')} step=".01" type="number" width="full" />
+                <FormHelperText marginBottom="1">Updating this is currently broken :(</FormHelperText>
+                <Input {...register('foot_size', {valueAsNumber: true})} step=".01" type="number" width="full" />
               </FormControl>
               <FormControl>
                 <FormLabel>Hand Size</FormLabel>
-                <Input {...register('hand_size')} step=".01" type="number" width="full" />
+                <FormHelperText marginBottom="1">Updating this is currently broken :(</FormHelperText>
+                <Input {...register('hand_size', {valueAsNumber: true})} step=".01" type="number" width="full" />
               </FormControl>
               <FormControl>
                 <FormLabel>Instagram</FormLabel>
