@@ -17,6 +17,7 @@ export const BuildSchema = z.object({
   ride_height: z.number().nullable(),
   tires: z.string().nullable(),
   uid: z.string(),
+  user_id: z.number(),
   vin: z.string().nullable(),
   wheels: z.string().nullable(),
   year: z.number().nullable(),

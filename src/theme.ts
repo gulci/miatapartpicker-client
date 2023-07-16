@@ -2,6 +2,14 @@ import {type ThemeConfig, extendTheme} from '@chakra-ui/react'
 import {type StyleFunctionProps, mode} from '@chakra-ui/theme-tools'
 
 export const theme = extendTheme({
+  components: {
+    Link: {
+      baseStyle: (props: StyleFunctionProps) => ({
+        _hover: {textDecoration: 'underline'},
+        color: mode('blue.600', 'blue.200')(props),
+      }),
+    },
+  },
   config: {initialColorMode: 'system', useSystemColorMode: true} as ThemeConfig,
   styles: {
     global: (props: StyleFunctionProps) => ({
@@ -23,6 +31,9 @@ export const theme = extendTheme({
         display: 'flex',
         flexDirection: 'column',
         minH: '100%',
+      },
+      '#nprogress .bar': {
+        backgroundColor: mode('blue.600', 'blue.200')(props),
       },
     }),
   },

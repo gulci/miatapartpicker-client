@@ -2,6 +2,7 @@ import {type ReactElement} from 'react'
 
 import {type GetServerSideProps, type InferGetServerSidePropsType} from 'next'
 import {useSession} from 'next-auth/react'
+import NextLink from 'next/link'
 import {useRouter} from 'next/router'
 
 import {
@@ -82,7 +83,7 @@ const ProfilePage: AppPage<InferGetServerSidePropsType<typeof getServerSideProps
   }
 
   return (
-    <Stack direction={{base: 'column', lg: 'row'}} spacing={{base: '12', lg: '16'}} flex="1" height="200">
+    <Stack direction={{base: 'column', lg: 'row'}} spacing={{base: '12', lg: '16'}} flex="1">
       <Flex maxWidth={{lg: '72'}} width="full">
         <VStack alignItems="start" spacing="4" flex="1">
           <Heading size="md">Account</Heading>
@@ -90,8 +91,9 @@ const ProfilePage: AppPage<InferGetServerSidePropsType<typeof getServerSideProps
           <VStack alignItems="start" spacing="4">
             <VStack alignItems="start" spacing="1">
               <Text as="b">Completed Builds</Text>
-              <Text>{profile.builds.length}</Text>
-              <Text as="small">(User builds page coming soon!)</Text>
+              <NextLink href={{pathname: '/users/[userId]/builds', query: {userId}}} legacyBehavior passHref>
+                <Link>{profile.builds.length}</Link>
+              </NextLink>
             </VStack>
           </VStack>
         </VStack>
@@ -131,7 +133,6 @@ const ProfilePage: AppPage<InferGetServerSidePropsType<typeof getServerSideProps
                     <Link
                       href={`https://instagram.com/${profile.instagram_handle.replace(/^@/, '')}`}
                       target="_blank"
-                      textDecoration="underline"
                       rel="noreferrer"
                     >
                       {profile.instagram_handle}
@@ -176,7 +177,11 @@ const ProfilePage: AppPage<InferGetServerSidePropsType<typeof getServerSideProps
 }
 
 ProfilePage.getLayout = (page: ReactElement<InferGetServerSidePropsType<typeof getServerSideProps>>) => {
-  return <UserLayout profile={page.props.profile}>{page}</UserLayout>
+  return (
+    <UserLayout profile={page.props.profile} title="Profile">
+      {page}
+    </UserLayout>
+  )
 }
 
 export default ProfilePage

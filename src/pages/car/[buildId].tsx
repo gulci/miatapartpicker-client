@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {type ReactElement, useState} from 'react'
 
 import {type GetServerSideProps, type InferGetServerSidePropsType} from 'next'
 
@@ -25,8 +25,8 @@ import {
 import {env} from '~/env.mjs'
 import {MainLayout} from '~/layouts/MainLayout'
 import {type AppPage} from '~/pages/_app'
-import {getBuild} from '~/server/mpp/requests/builds'
-import {type Build, BuildSchema} from '~/server/mpp/types/builds'
+import {getBuild} from '~/server/mpp/builds'
+import {type Build} from '~/server/mpp/types/builds'
 
 const BuildPage: AppPage<InferGetServerSidePropsType<typeof getServerSideProps>> = ({build}) => {
   const [index, setIndex] = useState(0)
@@ -115,10 +115,12 @@ const BuildPage: AppPage<InferGetServerSidePropsType<typeof getServerSideProps>>
   )
 }
 
-BuildPage.getLayout = (page) => {
-  const {build} = page.props as InferGetServerSidePropsType<typeof getServerSideProps>
+BuildPage.getLayout = (page: ReactElement<InferGetServerSidePropsType<typeof getServerSideProps>>) => {
   return (
-    <MainLayout headProps={{title: build.description || 'MiataPartPicker'}} navProps={{disableMargins: true}}>
+    <MainLayout
+      headProps={{title: page.props.build.description || 'MiataPartPicker'}}
+      navProps={{disableMargins: true}}
+    >
       {page}
     </MainLayout>
   )
@@ -132,11 +134,7 @@ type BuildPageProps = {
 
 export const getServerSideProps: GetServerSideProps<BuildPageProps, {buildId: string}> = async (ctx) => {
   if (!ctx.params) return {notFound: true}
-  const buildRes = await getBuild(ctx.params.buildId)
-  if (!buildRes.ok) {
-    if (buildRes.status === 404) return {notFound: true}
-    else throw new Error('failed to fetch build')
-  }
-  const build = BuildSchema.parse(await buildRes.json())
+  const build = await getBuild(ctx.params.buildId)
+  if (!build) return {notFound: true}
   return {props: {build}}
 }
