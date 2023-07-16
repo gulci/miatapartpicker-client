@@ -25,6 +25,7 @@
     "@trpc/server": "^10.26.0",
     "@vercel/analytics": "^1.0.1",
     "framer-motion": "^10.12.16",
+    "json-bigint": "^1.0.0",
     "keen-slider": "^6.6.10",
     "next": "^13.4.10",
     "next-auth": "^4.22.1",
@@ -39,6 +40,7 @@
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^4.1.1",
     "@types/eslint": "^8.37.0",
+    "@types/json-bigint": "^1.0.1",
     "@types/node": "^18.16.0",
     "@types/nprogress": "^0.2.0",
     "@types/react": "^18.2.6",

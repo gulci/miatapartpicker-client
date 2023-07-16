@@ -16,7 +16,7 @@ export type Profile = z.infer<typeof ProfileSchema>
 
 export const UserSchema = z.object({
   builds: z.array(z.string()),
-  discord_user_id: z.number(),
+  discord_user_id: z.string(),
   featured_build: z.string().nullable(),
   foot_size: z.number().nullable(),
   hand_size: z.number().nullable(),

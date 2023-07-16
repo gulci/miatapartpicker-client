@@ -1,3 +1,5 @@
+import JSONBig from 'json-bigint'
+
 import {env} from '~/env.mjs'
 import {getUser as getDiscordUser} from '~/server/discord/requests/users'
 import {UserSchema as DiscordUserSchema} from '~/server/discord/types/users'
@@ -16,7 +18,7 @@ export async function getUserProfile(userId: string) {
     if (mppUserRes.status === 404) return null
     else throw new Error('failed to fetch user from mpp')
   }
-  const mppUser = MPPUserSchema.parse(await mppUserRes.json())
+  const mppUser = MPPUserSchema.parse(JSONBig({storeAsString: true}).parse(await mppUserRes.text()))
 
   let avatarUrl = `${env.NEXT_PUBLIC_DISCORD_CDN_ENDPOINT_URL}/embed/avatars/${
     Number(discordUser.discriminator) % 5
